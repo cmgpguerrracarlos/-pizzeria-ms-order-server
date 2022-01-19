@@ -22,7 +22,7 @@ public class OrderController {
     }
     @PostMapping("/orders")
     public Order createOrder(@RequestBody Order order){
-        return orderService.saveOrder(order,order.getPizzaQuantityList());
+        return orderService.saveOrder(order);
     }
 
 }
