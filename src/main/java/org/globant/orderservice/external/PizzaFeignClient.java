@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient("catalog-server")
 public interface PizzaFeignClient {
-    @GetMapping("/catalogs/{code}")
-    DtoPizza getPizzaByCode(@PathVariable("code") String code);
+    @GetMapping("/pizzas/{uid}")
+    DtoPizza getPizzaByCode(@PathVariable("uid") String code);
 }
