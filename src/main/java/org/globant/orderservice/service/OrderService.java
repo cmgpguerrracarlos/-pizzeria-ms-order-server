@@ -1,6 +1,9 @@
 package org.globant.orderservice.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.globant.orderservice.dto.DtoOrder;
+import org.globant.orderservice.dto.DtoPizza;
+import org.globant.orderservice.external.PizzaFeignClient;
 import org.globant.orderservice.model.Order;
 import org.globant.orderservice.model.PizzaQuantity;
 import org.globant.orderservice.repository.OrderRepository;
@@ -17,6 +20,8 @@ import java.util.stream.Collectors;
 public class OrderService {
     @Autowired
     private OrderRepository orderRepository;
+
+    private PizzaFeignClient pizzaFeignClient;
 
     @Autowired
     private PizzaQuantityRepository pizzaQuantityRepository;
@@ -41,4 +46,13 @@ public class OrderService {
         return orderRepository.getByCiUser(ci);
     }
 
+    public DtoOrder makeAnOrder(Order order){
+
+
+        return new DtoOrder();
+    }
+
+    private Double totalPrice(List<PizzaQuantity> pizzas){
+        return 0.0;
+    }
 }
