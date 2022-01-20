@@ -22,23 +22,23 @@ public class OrderService {
     private PizzaQuantityRepository pizzaQuantityRepository;
 
     public List<Order> getAll(){
-        log.info("findall de pizzarepository "+pizzaQuantityRepository.findAll());
-        log.info("find all de order "+orderRepository.findAll());
-
+        log.info("find a list of all the orders ");
         return orderRepository.findAll();
     }
 
     public Order getOrderById(int id){
-        log.info("Obteniedndo la orden por el id " + orderRepository.findById(id).get());
-        Order order = orderRepository.findById(id).get();
+        log.info("Retrieve the order with the id ");
         return orderRepository.findById(id).get();
     }
 
     public Order saveOrder(Order order){
+        log.info("Save the order");
         return orderRepository.save(order);
     }
 
     public List<Order> getOrderByCi(String ci) {
+        log.info("Retrieve all the orders with the ci user ");
         return orderRepository.getByCiUser(ci);
     }
+
 }

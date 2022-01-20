@@ -29,9 +29,7 @@ public class OrderController {
 
     @PostMapping("/orders")
     public Order createOrder(@RequestBody Order order){
-        Order response= orderService.saveOrder(order);
-        log.info("Se guardo " + response);
-        return response;
+        return orderService.saveOrder(order);
     }
 
 }
