@@ -23,13 +23,16 @@ public class OrderController {
         return orderService.getOrderById(id);
     }
 
-    @GetMapping("/orders/{ci}")
+    @GetMapping("/orders/ci/{ci}")
     public List<Order> getOrderByCi(@PathVariable("ci") String ci){
         return orderService.getOrderByCi(ci);
     }
 
     @PostMapping("/orders")
     public Order createOrder(@RequestBody Order order){
+        var lista = order.getPizzaQuantityList();
+        var total = lista.stream().map(p->p.getPrice()*p.getQuantity()).reduce(0.0,(acum,newVal)->acum+newVal);
+        order.setTotal(total);
         return orderService.saveOrder(order);
     }
 

@@ -11,8 +11,9 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class PizzaQuantity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String code;
+    private Double price;
     private int quantity;
 }
