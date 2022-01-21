@@ -2,6 +2,7 @@ package org.globant.orderservice.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.globant.orderservice.model.Order;
+import org.globant.orderservice.model.PizzaQuantity;
 import org.globant.orderservice.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
@@ -28,13 +29,20 @@ public class OrderService {
     }
 
     public Order saveOrder(Order order){
-        log.info("Save the order");
+        var lista = order.getPizzaQuantityList();
+        order.setTotal(getTotal(lista));
         return orderRepository.save(order);
     }
 
     public List<Order> getOrderByCi(String ci) {
         log.info("Retrieve all the orders with the ci user ");
         return orderRepository.getByCiUser(ci);
+    }
+
+    private Double getTotal(List<PizzaQuantity> lista){
+        return lista.stream()
+                .map(p->p.getPrice()*p.getQuantity())
+                .reduce(0.0, Double::sum);
     }
 
 }

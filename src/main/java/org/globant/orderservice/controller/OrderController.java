@@ -30,9 +30,6 @@ public class OrderController {
 
     @PostMapping("/orders")
     public Order createOrder(@RequestBody Order order){
-        var lista = order.getPizzaQuantityList();
-        var total = lista.stream().map(p->p.getPrice()*p.getQuantity()).reduce(0.0,(acum,newVal)->acum+newVal);
-        order.setTotal(total);
         return orderService.saveOrder(order);
     }
 
