@@ -2,7 +2,7 @@ package org.globant.orderservice.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.globant.orderservice.model.*;
-import org.globant.orderservice.service.OrderService;
+import org.globant.orderservice.service.OrderServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +12,7 @@ import java.util.List;
 public class OrderController {
 
     @Autowired
-    private OrderService orderService;
+    private OrderServiceImpl orderService;
 
     @GetMapping("/orders")
     public List<Order> getAll(){
