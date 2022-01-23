@@ -1,23 +1,26 @@
 package org.globant.orderservice.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.globant.orderservice.model.*;
+import org.globant.orderservice.model.Order;
+import org.globant.orderservice.service.OrderService;
 import org.globant.orderservice.service.OrderServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 @Slf4j
 @RestController
 public class OrderController {
-
     @Autowired
-    private OrderServiceImpl orderService;
+    private OrderService orderService;
 
     @GetMapping("/orders")
-    public List<Order> getAll(){
-        return orderService.getAll();
+    public ResponseEntity<List<Order>> getAll(){
+        return new ResponseEntity<>(orderService.getAll(), HttpStatus.OK);
     }
+
     @GetMapping("/orders/{id}")
     public Order getTheOrder(@PathVariable("id") int id){
         return orderService.getOrderById(id);
