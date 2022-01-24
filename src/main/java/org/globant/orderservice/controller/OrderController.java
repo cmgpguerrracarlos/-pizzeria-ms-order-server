@@ -22,22 +22,38 @@ public class OrderController {
 
     @GetMapping(value = "/orders")
     public ResponseEntity<List<Order>> getAll(){
-        return new ResponseEntity<>(orderService.getAll(), HttpStatus.OK);
+        try{
+            return new ResponseEntity<>(orderService.getAll(), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping(value = "/orders/{id}")
-    public Order getTheOrder(@PathVariable("id") int id){
-        return orderService.getOrderById(id);
+    public ResponseEntity<Order> getTheOrder(@PathVariable("id") int id){
+        try{
+            return new ResponseEntity<>(orderService.getOrderById(id), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping(value = "/orders/ci/{ci}")
-    public List<Order> getOrderByCi(@PathVariable("ci") String ci){
-        return orderService.getOrderByCi(ci);
+    public ResponseEntity<List<Order>> getOrderByCi(@PathVariable("ci") String ci){
+        try{
+            return new ResponseEntity<>(orderService.getOrderByCi(ci), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping(value = "/orders")
-    public Order createOrder(@RequestBody Order order){
-        return orderService.saveOrder(order);
+    public ResponseEntity<Order> createOrder(@RequestBody Order order){
+        try{
+            return new ResponseEntity<>(orderService.saveOrder(order), HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
     }
 
 }
