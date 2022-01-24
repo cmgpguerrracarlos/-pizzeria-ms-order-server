@@ -16,22 +16,22 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @GetMapping("/orders")
+    @GetMapping(value = "/orders")
     public ResponseEntity<List<Order>> getAll(){
         return new ResponseEntity<>(orderService.getAll(), HttpStatus.OK);
     }
 
-    @GetMapping("/orders/{id}")
+    @GetMapping(value = "/orders/{id}")
     public Order getTheOrder(@PathVariable("id") int id){
         return orderService.getOrderById(id);
     }
 
-    @GetMapping("/orders/ci/{ci}")
+    @GetMapping(value = "/orders/ci/{ci}")
     public List<Order> getOrderByCi(@PathVariable("ci") String ci){
         return orderService.getOrderByCi(ci);
     }
 
-    @PostMapping("/orders")
+    @PostMapping(value = "/orders")
     public Order createOrder(@RequestBody Order order){
         return orderService.saveOrder(order);
     }
