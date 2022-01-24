@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.globant.orderservice.model.Order;
 import org.globant.orderservice.model.PizzaQuantity;
 import org.globant.orderservice.repository.OrderRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService{
     private final OrderRepository orderRepository;
 
+    @Autowired
     public OrderServiceImpl(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }
