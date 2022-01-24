@@ -8,7 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -32,8 +35,9 @@ public class OrderServiceImpl implements OrderService{
     }
 
     public Order saveOrder(Order order){
-        var lista = order.getPizzaQuantityList();
-        order.setTotal(getTotal(lista));
+        Double total = this.calculateTotal(order.getPizzaQuantityList());
+        order.setTotal(total);
+        log.info("Saved the new order");
         return orderRepository.save(order);
     }
 
@@ -42,10 +46,18 @@ public class OrderServiceImpl implements OrderService{
         return orderRepository.getByCiUser(ci);
     }
 
-    private Double getTotal(List<PizzaQuantity> lista){
+    private Double calculateTotal(List<PizzaQuantity> lista){
+        var codes = lista.stream().map(PizzaQuantity::getCode).collect(Collectors.toList());
+        var subTotals = obtainListOfPrices(codes);
+
         return lista.stream()
                 .map(p->p.getPrice()*p.getQuantity())
                 .reduce(0.0, Double::sum);
+    }
+
+    private Map<String,Double> obtainListOfPrices(List<String> code){
+        //TODO USE OPENFEIGN TO GET THE LIST OF PRICES
+        return new HashMap<>();
     }
 
 }
