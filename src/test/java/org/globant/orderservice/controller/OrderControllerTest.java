@@ -5,6 +5,7 @@ import org.globant.orderservice.model.Order;
 import org.globant.orderservice.model.PizzaQuantity;
 import org.globant.orderservice.service.OrderService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.mockito.BDDMockito.given;
 import static org.junit.jupiter.api.Assertions.*;
@@ -50,35 +52,46 @@ class OrderControllerTest {
         var listOfPizzasQuantity = Arrays.asList(new PizzaQuantity(1,"cvc",23.8,3));
         var order1 = Order.builder().id(1).ciUser("one").pizzaQuantityList(listOfPizzasQuantity).build();
         var order2 = Order.builder().id(2).ciUser("two").pizzaQuantityList(listOfPizzasQuantity).build();
+        var order3 = Order.builder().id(3).ciUser("one").pizzaQuantityList(listOfPizzasQuantity).build();
 
-        listMockOrders = Arrays.asList(order1,order2);
+        listMockOrders = Arrays.asList(order1,order2,order3);
     }
 
     @Test
+    @DisplayName("Test getAll with valid values")
     void testGetAll() throws Exception {
 
         when(orderService.getAll()).thenReturn(listMockOrders);
 
-        mockMvc.perform(MockMvcRequestBuilders.get(baseUrl).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get(baseUrl).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
-                .andExpect(jsonPath("$[0].id").value(1))
-                .andExpect(jsonPath("$[0].ciUser").value("one"))
                 .andExpect(jsonPath("$[1].id").value(2))
                 .andExpect(jsonPath("$[1].ciUser").value("two"));
         verify(orderService).getAll();
     }
 
     @Test
+    @DisplayName("Test getOrderById with valid values")
     void testGetTheOrder() throws Exception {
         given(orderService.getOrderById(1)).willReturn(listMockOrders.get(0));
-        mockMvc.perform(MockMvcRequestBuilders.get(baseUrl+"/1").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get(baseUrl+"/1").contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().is2xxSuccessful())
                         .andExpect(jsonPath("$.id").value(1))
                         .andExpect(jsonPath("$.ciUser").value("one"));
-        verify(orderService).getOrderById(1);    }
+        verify(orderService).getOrderById(1);
+    }
 
     @Test
-    void testGetOrderByCi() {
+    @DisplayName("test getOrderByCi with valid values")
+    void testGetOrderByCi() throws Exception {
+        var listFiltered = listMockOrders.stream().filter(o-> o.getCiUser().equals("one")).collect(Collectors.toList());
+        System.out.println(listFiltered);
+        given(orderService.getOrderByCi("one")).willReturn(listFiltered);
+        mockMvc.perform(get(baseUrl+"/ci/one").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$[0].ciUser").value("one"))
+                .andExpect(jsonPath("$[1].ciUser").value("one"));
+        verify(orderService).getOrderByCi("one");
     }
 
     @Test
