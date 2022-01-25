@@ -49,7 +49,7 @@ class OrderControllerTest {
 
     @BeforeEach
     void setUp(){
-        var listOfPizzasQuantity = Arrays.asList(new PizzaQuantity(1,"cvc",23.8,3));
+        var listOfPizzasQuantity = Arrays.asList(new PizzaQuantity(1,"cvc",23.8f,3));
         var order1 = Order.builder().id(1).ciUser("one").pizzaQuantityList(listOfPizzasQuantity).build();
         var order2 = Order.builder().id(2).ciUser("two").pizzaQuantityList(listOfPizzasQuantity).build();
         var order3 = Order.builder().id(3).ciUser("one").pizzaQuantityList(listOfPizzasQuantity).build();

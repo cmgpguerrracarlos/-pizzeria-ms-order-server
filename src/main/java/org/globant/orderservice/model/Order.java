@@ -22,7 +22,7 @@ public class Order {
     private int id;
     private String ciUser;
     private String Address;
-    private Double total;
+    private Float total;
     @Column(nullable = false, updatable = false)
     @CreationTimestamp()
     private Date dateCreation;

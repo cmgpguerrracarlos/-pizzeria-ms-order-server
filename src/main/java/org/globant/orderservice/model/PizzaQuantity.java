@@ -14,6 +14,6 @@ public class PizzaQuantity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String code;
-    private Double price;
+    private Float price;
     private int quantity;
 }
