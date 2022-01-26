@@ -102,6 +102,6 @@ class OrderControllerTest {
                         .content(orderJsonString)
                         .accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isCreated());
-        verify(orderService).saveOrder(returnOrder);
     }
+
 }
