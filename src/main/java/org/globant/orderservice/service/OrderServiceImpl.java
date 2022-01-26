@@ -5,24 +5,23 @@ import org.globant.orderservice.external.PizzaService;
 import org.globant.orderservice.model.Order;
 import org.globant.orderservice.model.PizzaQuantity;
 import org.globant.orderservice.repository.OrderRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 @Primary
 public class OrderServiceImpl implements OrderService{
 
-    @Autowired
-    private OrderRepository orderRepository;
-    @Autowired
-    private PizzaService pizzaService;
+    private final OrderRepository orderRepository;
+    private final PizzaService pizzaService;
+
+    public OrderServiceImpl(OrderRepository orderRepository, PizzaService pizzaService) {
+        this.orderRepository = orderRepository;
+        this.pizzaService = pizzaService;
+    }
 
     public List<Order> getAll(){
         log.info("find a list of all the orders ");
@@ -35,10 +34,9 @@ public class OrderServiceImpl implements OrderService{
     }
 
     public Order saveOrder(Order order){
-        Float total = this.calculateTotal(order.getPizzaQuantityList());
-        order.setTotal(total);
+        var returnOrder = calculateTotal(order);
         log.info("Saved the new order");
-        return orderRepository.save(order);
+        return orderRepository.save(returnOrder);
     }
 
     public List<Order> getOrderByCi(String ci) {
@@ -46,19 +44,18 @@ public class OrderServiceImpl implements OrderService{
         return orderRepository.getByCiUser(ci);
     }
 
-    private Float calculateTotal(List<PizzaQuantity> lista){
-        return lista.stream()
+    private Order calculateTotal(Order order){
+        var listPizzasQuantity = order.getPizzaQuantityList();
+        for(PizzaQuantity pizza: listPizzasQuantity){
+            var price = pizzaService.getPriceByCode(pizza.getCode());
+            pizza.setPrice(price);
+        }
+        order.setPizzaQuantityList(listPizzasQuantity);
+        var total = listPizzasQuantity.stream()
                 .map(p->pizzaService.getPriceByCode(p.getCode())*p.getQuantity())
                 .reduce(0.0f, Float::sum);
-    }
-
-    private Map<String,Float> obtainListOfPrices(List<String> codes){
-        //TODO USE OPENFEIGN TO GET THE LIST OF PRICES
-        Map<String,Float> floatMap = new HashMap<>();
-        for (String code: codes){
-            floatMap.put(code,pizzaService.getPriceByCode(code));
-        }
-        return floatMap;
+        order.setTotal(total);
+        return order;
     }
 
 }
