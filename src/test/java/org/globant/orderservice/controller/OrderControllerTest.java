@@ -27,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -85,7 +86,7 @@ class OrderControllerTest {
     @DisplayName("test getOrderByCi with valid values")
     void testGetOrderByCi() throws Exception {
         var listFiltered = listMockOrders.stream().filter(o-> o.getCiUser().equals("one")).collect(Collectors.toList());
-        System.out.println(listFiltered);
+
         given(orderService.getOrderByCi("one")).willReturn(listFiltered);
         mockMvc.perform(get(baseUrl+"/ci/one").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
@@ -95,6 +96,14 @@ class OrderControllerTest {
     }
 
     @Test
-    void testCreateOrder() {
+    void testCreateOrder() throws Exception {
+        //TODO FIX THIS TEST AND ADD FAIL CASES
+        var givenOrder = listMockOrders.get(0);
+        given(orderService.saveOrder(givenOrder)).willReturn(givenOrder);
+        String orderJsonString = this.mapper.writeValueAsString(givenOrder);
+        mockMvc.perform(post(baseUrl+"/").contentType(MediaType.APPLICATION_JSON).content(orderJsonString))
+                .andExpect(status().is2xxSuccessful());
+        verify(orderService).saveOrder(givenOrder);
+
     }
 }
