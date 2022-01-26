@@ -14,21 +14,17 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.mockito.BDDMockito.given;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = OrderController.class)
@@ -96,14 +92,16 @@ class OrderControllerTest {
     }
 
     @Test
+    @DisplayName("test saveOrder with valid values")
     void testCreateOrder() throws Exception {
-        //TODO FIX THIS TEST AND ADD FAIL CASES
         var givenOrder = listMockOrders.get(0);
-        given(orderService.saveOrder(givenOrder)).willReturn(givenOrder);
-        String orderJsonString = this.mapper.writeValueAsString(givenOrder);
-        mockMvc.perform(post(baseUrl+"/").contentType(MediaType.APPLICATION_JSON).content(orderJsonString))
-                .andExpect(status().is2xxSuccessful());
-        verify(orderService).saveOrder(givenOrder);
-
+        var returnOrder = Order.builder().id(1).ciUser("one").total(23f).build();
+        given(orderService.saveOrder(givenOrder)).willReturn(returnOrder);
+        String orderJsonString = mapper.writeValueAsString(givenOrder);
+        mockMvc.perform(post(baseUrl)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(orderJsonString)
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isCreated());
     }
 }
