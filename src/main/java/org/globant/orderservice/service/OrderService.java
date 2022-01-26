@@ -11,5 +11,5 @@ public interface OrderService {
     Order getOrderById(int id);
     Order saveOrder(Order order);
     List<Order> getOrderByCi(String ci);
-
+    Order updateOrder(Order order);
 }

@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.globant.orderservice.model.Order;
 import org.globant.orderservice.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -50,6 +51,11 @@ public class OrderController {
         return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 
+    }
+
+    @PutMapping(value = "/orders")
+    public ResponseEntity<Order> updateOrder(@RequestBody Order order){
+        return new ResponseEntity<>(orderService.updateOrder(order),HttpStatus.OK);
     }
 
 }
