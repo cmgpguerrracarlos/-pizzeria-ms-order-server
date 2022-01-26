@@ -9,14 +9,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static reactor.core.publisher.Mono.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 @ExtendWith(MockitoExtension.class)
 class OrderServiceImplTest {
 
@@ -51,7 +50,7 @@ class OrderServiceImplTest {
 
     @Test
     void getOrderById() {
-        Mockito.when(orderRepository.findById(1)).thenReturn(orderList.get(0);
+        Mockito.when(orderRepository.findById(1)).thenReturn(Optional.ofNullable(orderList.get(0)));
 
         var result = orderService.getOrderById(1);
 
@@ -62,9 +61,22 @@ class OrderServiceImplTest {
 
     @Test
     void saveOrder() {
+        //TODO SAVE ORDER SERVICE
     }
 
     @Test
     void getOrderByCi() {
+        //TODO GET ORDER BY CI SERVICE
+    }
+
+
+    @Test
+    void updateOrder() {
+        //TODO UPDATE ORDER SERVICE
+    }
+
+    @Test
+    void deleteOrder() {
+        //TODO DELETE ORDER SERVICE
     }
 }

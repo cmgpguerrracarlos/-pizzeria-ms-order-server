@@ -1,5 +1,6 @@
 package org.globant.orderservice.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.globant.orderservice.model.Order;
 import org.globant.orderservice.model.PizzaQuantity;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.RequestEntity.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -104,4 +106,13 @@ class OrderControllerTest {
                         .andExpect(status().isCreated());
     }
 
+    @Test
+    void updateOrder(){
+        //TODO ADD TEST UPDATE CONTROLLER
+    }
+
+    @Test
+    void deleteOrder() {
+        //TODO DELETE ORDER CONTROLLER
+    }
 }

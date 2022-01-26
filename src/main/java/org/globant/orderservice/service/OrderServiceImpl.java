@@ -14,7 +14,7 @@ import java.util.List;
 @Slf4j
 @Primary
 public class OrderServiceImpl implements OrderService{
-
+    //TODO ADD EXCEPTIONS AND LOG SERVICE
     private final OrderRepository orderRepository;
     private final PizzaService pizzaService;
 
@@ -60,6 +60,9 @@ public class OrderServiceImpl implements OrderService{
 
     public Order updateOrder(Order order){
         return orderRepository.save(order);
+    }
+    public void deleteOrderById(int id){
+        orderRepository.deleteById(id);
     }
 
 }
