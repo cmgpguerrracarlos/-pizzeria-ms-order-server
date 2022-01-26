@@ -44,8 +44,11 @@ public class OrderController {
 
     @PostMapping(value = "/orders")
     public ResponseEntity<Order> createOrder(@RequestBody Order order){
-        
+     try{
             return new ResponseEntity<>(orderService.saveOrder(order), HttpStatus.CREATED);
+    }catch (Exception e){
+        return new ResponseEntity<>(HttpStatus.CONFLICT);
+    }
 
     }
 

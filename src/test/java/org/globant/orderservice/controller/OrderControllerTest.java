@@ -94,14 +94,14 @@ class OrderControllerTest {
     @Test
     @DisplayName("test saveOrder with valid values")
     void testCreateOrder() throws Exception {
-        var givenOrder = listMockOrders.get(0);
         var returnOrder = Order.builder().id(1).ciUser("one").total(23f).build();
-        given(orderService.saveOrder(givenOrder)).willReturn(returnOrder);
-        String orderJsonString = mapper.writeValueAsString(givenOrder);
+        given(orderService.saveOrder(returnOrder)).willReturn(returnOrder);
+        String orderJsonString = mapper.writeValueAsString(returnOrder);
         mockMvc.perform(post(baseUrl)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(orderJsonString)
                         .accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isCreated());
+        verify(orderService).saveOrder(returnOrder);
     }
 }
