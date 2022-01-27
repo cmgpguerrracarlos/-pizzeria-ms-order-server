@@ -13,7 +13,7 @@ import java.util.List;
 @Slf4j
 @RestController
 public class OrderController {
-    //TODO ADD EXCEPTIONS AND LOG CONTROLLER
+
     @Autowired
     private OrderService orderService;
 
@@ -55,12 +55,21 @@ public class OrderController {
 
     @PutMapping(value = "/orders")
     public ResponseEntity<Order> updateOrder(@RequestBody Order order){
-        return new ResponseEntity<>(orderService.updateOrder(order),HttpStatus.OK);
+        try{
+            return new ResponseEntity<>(orderService.updateOrder(order),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
     }
 
     @DeleteMapping(value = "/orders/{id}")
     public ResponseEntity<Order> deleteOrder(@PathVariable("id") int id){
-        orderService.deleteOrderById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        try{
+            orderService.deleteOrderById(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+
     }
 }

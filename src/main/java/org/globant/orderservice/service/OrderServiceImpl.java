@@ -5,6 +5,7 @@ import org.globant.orderservice.external.PizzaService;
 import org.globant.orderservice.model.Order;
 import org.globant.orderservice.model.PizzaQuantity;
 import org.globant.orderservice.repository.OrderRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ public class OrderServiceImpl implements OrderService{
     private final OrderRepository orderRepository;
     private final PizzaService pizzaService;
 
+    @Autowired
     public OrderServiceImpl(OrderRepository orderRepository, PizzaService pizzaService) {
         this.orderRepository = orderRepository;
         this.pizzaService = pizzaService;
