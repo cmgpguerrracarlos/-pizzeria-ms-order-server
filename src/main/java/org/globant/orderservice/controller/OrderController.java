@@ -3,8 +3,6 @@ package org.globant.orderservice.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.globant.orderservice.model.Order;
 import org.globant.orderservice.service.OrderService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +12,11 @@ import java.util.List;
 @RestController
 public class OrderController {
 
-    @Autowired
-    private OrderService orderService;
+    private final OrderService orderService;
+
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
+    }
 
     @GetMapping(value = "/orders")
     public ResponseEntity<List<Order>> getAll(){
