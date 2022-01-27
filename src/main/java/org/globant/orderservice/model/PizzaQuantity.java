@@ -9,6 +9,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class PizzaQuantity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

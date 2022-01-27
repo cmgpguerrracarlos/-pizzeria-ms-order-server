@@ -1,6 +1,8 @@
 package org.globant.orderservice.service;
 
+import org.globant.orderservice.external.PizzaService;
 import org.globant.orderservice.model.Order;
+import org.globant.orderservice.model.PizzaQuantity;
 import org.globant.orderservice.repository.OrderRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +25,9 @@ class OrderServiceImplTest {
     @Mock
     OrderRepository orderRepository;
 
+    @Mock
+    PizzaService pizzaService;
+
     @InjectMocks
     OrderServiceImpl orderService;
 
@@ -38,13 +43,13 @@ class OrderServiceImplTest {
 
     @Test
     void getAll() {
-        int resultLengthExpected = 2;
+
         Mockito.when(orderRepository.findAll()).thenReturn(orderList);
 
         var result = orderService.getAll();
-
-        assertEquals(resultLengthExpected, result.size(),"Testing size of the result");
-        assertEquals(3,orderList.get(1).getId(), "Testing id of the second value");
+        System.out.println(result);
+        assertEquals(3, result.size(),"Testing size of the result");
+        assertEquals(2,orderList.get(1).getId(), "Testing id of the second value");
         assertEquals("def",orderList.get(1).getCiUser(), "Testing ci of the second value");
 
     }
@@ -63,6 +68,16 @@ class OrderServiceImplTest {
     @Test
     void saveOrder() {
         //TODO SAVE ORDER SERVICE
+        var pizza = PizzaQuantity.builder().code("nQM").quantity(1).id(1).build();
+        var newOrder = Order.builder().id(4).ciUser("xyz")
+                .Address("dddd").pizzaQuantityList(Arrays.asList(pizza)).total(12F).build();
+        Mockito.when(orderRepository.save(newOrder)).thenReturn(newOrder);
+        Mockito.when(pizzaService.getPriceByCode("nQM")).thenReturn(234F);
+        System.out.println(newOrder);
+        var result = orderService.saveOrder(newOrder);
+        assertNotNull(result,"Verify object is not nll");
+        assertEquals(4,result.getId(), "Testing id of the result");
+        assertEquals("xyz",result.getCiUser(), "Testing ci of the result");
     }
 
     @Test
@@ -80,6 +95,13 @@ class OrderServiceImplTest {
     @Test
     void updateOrder() {
         //TODO UPDATE ORDER SERVICE
+        var newOrder = Order.builder().id(4).ciUser("xyz").total(12F).build();
+        Mockito.when(orderRepository.save(newOrder)).thenReturn(newOrder);
+        var result = orderService.updateOrder(newOrder);
+        assertNotNull(result,"Verify object is not nll");
+        assertEquals(4,result.getId(), "Testing id of the result");
+        assertEquals("xyz",result.getCiUser(), "Testing ci of the result");
+        assertEquals(12F,result.getTotal(),"Testing the total");
     }
 
     @Test
