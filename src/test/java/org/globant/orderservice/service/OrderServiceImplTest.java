@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import static org.mockito.Mockito.verify;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 @ExtendWith(MockitoExtension.class)
 class OrderServiceImplTest {
 
@@ -67,7 +69,6 @@ class OrderServiceImplTest {
 
     @Test
     void saveOrder() {
-        //TODO SAVE ORDER SERVICE
         var pizza = PizzaQuantity.builder().code("nQM").quantity(1).id(1).build();
         var newOrder = Order.builder().id(4).ciUser("xyz")
                 .Address("dddd").pizzaQuantityList(Arrays.asList(pizza)).total(12F).build();
@@ -82,7 +83,6 @@ class OrderServiceImplTest {
 
     @Test
     void getOrderByCi() {
-        //TODO GET ORDER BY CI SERVICE
         Mockito.when(orderRepository.getByCiUser("abc")).thenReturn(orderList.stream().filter(o->o.getCiUser().equals("abc")).collect(Collectors.toList()));
 
         var result = orderService.getOrderByCi("abc");
@@ -94,7 +94,6 @@ class OrderServiceImplTest {
 
     @Test
     void updateOrder() {
-        //TODO UPDATE ORDER SERVICE
         var newOrder = Order.builder().id(4).ciUser("xyz").total(12F).build();
         Mockito.when(orderRepository.save(newOrder)).thenReturn(newOrder);
         var result = orderService.updateOrder(newOrder);
@@ -106,6 +105,7 @@ class OrderServiceImplTest {
 
     @Test
     void deleteOrder() {
-        //TODO DELETE ORDER SERVICE
+        orderService.deleteOrderById(1);
+        verify(orderRepository).deleteById(1);
     }
 }
