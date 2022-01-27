@@ -67,6 +67,13 @@ class OrderServiceImplTest {
     @Test
     void getOrderByCi() {
         //TODO GET ORDER BY CI SERVICE
+        Mockito.when(orderRepository.getByCiUser("abc")).thenReturn((List<Order>) orderList.get(0));
+
+        var result = orderService.getOrderById(1);
+
+        assertNotNull(result,"Verify object is not nll");
+        assertEquals(1,result.getId(), "Testing id of the value");
+        assertEquals("abc",result.getCiUser(), "Testing ci of the value");
     }
 
 
