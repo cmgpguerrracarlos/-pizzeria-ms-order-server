@@ -5,6 +5,7 @@ import org.globant.orderservice.model.Order;
 import org.globant.orderservice.model.PizzaQuantity;
 import org.globant.orderservice.repository.OrderRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -44,6 +45,7 @@ class OrderServiceImplTest {
     }
 
     @Test
+    @DisplayName("Service:Test getAll with valid values")
     void getAll() {
 
         Mockito.when(orderRepository.findAll()).thenReturn(orderList);
@@ -57,6 +59,7 @@ class OrderServiceImplTest {
     }
 
     @Test
+    @DisplayName("Service:Test getOrderById with valid values")
     void getOrderById() {
         Mockito.when(orderRepository.findById(1)).thenReturn(Optional.ofNullable(orderList.get(0)));
 
@@ -68,6 +71,7 @@ class OrderServiceImplTest {
     }
 
     @Test
+    @DisplayName("Service:Test saveOrder with valid values")
     void saveOrder() {
         var pizza = PizzaQuantity.builder().code("nQM").quantity(1).id(1).build();
         var newOrder = Order.builder().id(4).ciUser("xyz")
@@ -82,6 +86,7 @@ class OrderServiceImplTest {
     }
 
     @Test
+    @DisplayName("Service:Test getOrderByCi with valid values")
     void getOrderByCi() {
         Mockito.when(orderRepository.getByCiUser("abc")).thenReturn(orderList.stream().filter(o->o.getCiUser().equals("abc")).collect(Collectors.toList()));
 
@@ -93,6 +98,7 @@ class OrderServiceImplTest {
 
 
     @Test
+    @DisplayName("Service:Test updateOrder with valid values")
     void updateOrder() {
         var newOrder = Order.builder().id(4).ciUser("xyz").total(12F).build();
         Mockito.when(orderRepository.save(newOrder)).thenReturn(newOrder);
@@ -104,6 +110,7 @@ class OrderServiceImplTest {
     }
 
     @Test
+    @DisplayName("Service:Test deleteOrderById with valid values")
     void deleteOrder() {
         orderService.deleteOrderById(1);
         verify(orderRepository).deleteById(1);

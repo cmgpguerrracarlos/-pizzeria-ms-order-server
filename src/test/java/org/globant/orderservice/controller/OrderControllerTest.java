@@ -56,12 +56,11 @@ class OrderControllerTest {
         var order1 = Order.builder().id(1).ciUser("one").pizzaQuantityList(listOfPizzasQuantity).build();
         var order2 = Order.builder().id(2).ciUser("two").pizzaQuantityList(listOfPizzasQuantity).build();
         var order3 = Order.builder().id(3).ciUser("one").pizzaQuantityList(listOfPizzasQuantity).build();
-
         listMockOrders = Arrays.asList(order1,order2,order3);
     }
 
     @Test
-    @DisplayName("Test getAll with valid values")
+    @DisplayName("Controller:Test getAll with valid values")
     void testGetAll() throws Exception {
 
         when(orderService.getAll()).thenReturn(listMockOrders);
@@ -74,7 +73,7 @@ class OrderControllerTest {
     }
 
     @Test
-    @DisplayName("Test getOrderById with valid values")
+    @DisplayName("Controller:Test getOrderById with valid values")
     void testGetTheOrder() throws Exception {
         given(orderService.getOrderById(1)).willReturn(listMockOrders.get(0));
         mockMvc.perform(get(baseUrl+"/1").contentType(MediaType.APPLICATION_JSON))
@@ -85,7 +84,7 @@ class OrderControllerTest {
     }
 
     @Test
-    @DisplayName("test getOrderByCi with valid values")
+    @DisplayName("Controller:Test getOrderByCi with valid values")
     void testGetOrderByCi() throws Exception {
         var listFiltered = listMockOrders.stream().filter(o-> o.getCiUser().equals("one")).collect(Collectors.toList());
 
@@ -98,7 +97,7 @@ class OrderControllerTest {
     }
 
     @Test
-    @DisplayName("test saveOrder with valid values")
+    @DisplayName("Controller:Test saveOrder with valid values")
     void testCreateOrder() throws Exception {
         var returnOrder = Order.builder().id(1).ciUser("one").total(23f).build();
         given(orderService.saveOrder(returnOrder)).willReturn(returnOrder);
@@ -111,6 +110,7 @@ class OrderControllerTest {
     }
 
     @Test
+    @DisplayName("Controller:Test update order with valid values")
     void updateOrder() throws Exception {
         var returnOrder = Order.builder().id(1).ciUser("one").total(23f).build();
         given(orderService.updateOrder(returnOrder)).willReturn(returnOrder);
@@ -122,18 +122,16 @@ class OrderControllerTest {
                 .content(this.mapper.writeValueAsBytes(returnOrder));
         mockMvc.perform(builder)
                 .andExpect(status().is2xxSuccessful());
-
     }
 
     @Test
+    @DisplayName("Controller:Test deleteOrder by ID with valid values")
     void deleteOrder() throws Exception {
         OrderService serviceSpy = Mockito.spy(orderService);
         Mockito.doNothing().when(serviceSpy).deleteOrderById(1);
 
         mockMvc.perform(MockMvcRequestBuilders.delete(baseUrl+"/1")
                 .contentType(MediaType.APPLICATION_JSON)).andExpect(status().is2xxSuccessful());
-
-        verify(orderService).deleteOrderById(1);
 
     }
 }
