@@ -9,12 +9,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Arrays;
 import java.util.List;
@@ -107,12 +111,29 @@ class OrderControllerTest {
     }
 
     @Test
-    void updateOrder(){
-        //TODO ADD TEST UPDATE CONTROLLER
+    void updateOrder() throws Exception {
+        var returnOrder = Order.builder().id(1).ciUser("one").total(23f).build();
+        given(orderService.updateOrder(returnOrder)).willReturn(returnOrder);
+        String orderJsonString = mapper.writeValueAsString(returnOrder);
+
+        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
+                .put(baseUrl, returnOrder).contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
+                .content(this.mapper.writeValueAsBytes(returnOrder));
+        mockMvc.perform(builder)
+                .andExpect(status().is2xxSuccessful());
+
     }
 
     @Test
-    void deleteOrder() {
-        //TODO DELETE ORDER CONTROLLER
+    void deleteOrder() throws Exception {
+        OrderService serviceSpy = Mockito.spy(orderService);
+        Mockito.doNothing().when(serviceSpy).deleteOrderById(1);
+
+        mockMvc.perform(MockMvcRequestBuilders.delete(baseUrl+"/1")
+                .contentType(MediaType.APPLICATION_JSON)).andExpect(status().is2xxSuccessful());
+
+        verify(orderService).deleteOrderById(1);
+
     }
 }
