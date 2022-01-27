@@ -32,7 +32,8 @@ public class OrderServiceImpl implements OrderService{
 
     public Order getOrderById(int id){
         log.info("Retrieve the order with the id ");
-        return orderRepository.findById(id).get();
+
+        return orderRepository.findById(id).orElse(null);
     }
 
     public Order saveOrder(Order order){
