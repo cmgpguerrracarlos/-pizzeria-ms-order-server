@@ -1,6 +1,7 @@
 package org.globant.orderservice.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.globant.orderservice.exception.OrderNotFoundException;
 import org.globant.orderservice.external.PizzaService;
 import org.globant.orderservice.model.Order;
 import org.globant.orderservice.model.PizzaQuantity;
@@ -10,12 +11,13 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
 @Primary
 public class OrderServiceImpl implements OrderService{
-    //TODO ADD EXCEPTIONS AND LOG SERVICE
+
     private final OrderRepository orderRepository;
     private final PizzaService pizzaService;
 
@@ -32,8 +34,12 @@ public class OrderServiceImpl implements OrderService{
 
     public Order getOrderById(int id){
         log.info("Retrieve the order with the id ");
-
-        return orderRepository.findById(id).orElse(null);
+        Optional<Order> response = orderRepository.findById(id);
+        if(response.isEmpty()){
+            System.out.println(response);
+            throw new OrderNotFoundException();
+        }
+        return response.get();
     }
 
     public Order saveOrder(Order order){
